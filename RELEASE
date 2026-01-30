@@ -1,0 +1,193 @@
+- version: 1.9.0
+  changes:
+  - Added support for Igus robot.
+  - Changed to use .modx extension on Omnicore controllers.
+  - Fixed digital output declarations in Staubli.
+  - Fixed Doosan exception at initialization.
+
+- version: 1.8.0
+  changes:
+  - Improved Franka Emika inverse kinematics.
+  - Improved singularity and joint range checks.
+  - Changed Kinematics component tracks previous pose.
+  - Changed program simulation ends earlier at error.
+  - Changed Franka remote to call python3 instead of python.
+  - Changed solution to use new .slnx format.
+  - Added ability to use alternative post-processors.
+  - Added support for ABB GoFa.
+
+- version: 1.7.0
+  changes:
+  - Fixed RIPEMD160 missing in .NET 7 (Rhino 8).
+  - Changed target attributes are now compared by value.
+  - Added cast from integer to Joints parameter.
+  - Added persistance to Joints parameter.
+  - Added support for Fanuc (by a third party contributor).
+  - Added deconstruct Toolpath component.
+  - Added ability to change folder path for local libraries.
+
+- version: 1.6.7
+  changes:
+  - Fixed UR FromPlane wrong units.
+  - Added remark when Get/FromPlane robot system input disconnected.
+  - New Speed component with accel inputs and a higher default accel.
+  - Franka Emika can use the axis accel input for dynamic_rel.
+
+- version: 1.6.6
+  changes:
+  - Fixed UR pulseDO command.
+  - Fixed KUKA custom external.
+
+- version: 1.6.5
+  changes:
+  - Added Orocos KDL solver for Franka Emika (Windows only).
+
+- version: 1.6.4
+  changes:
+  - Fixed Franka Emika inverse kinematics.
+  - Fixed Staubli robot base can be place at origin in library.
+
+- version: 1.6.2
+  changes:
+  - Fixes for Franka Emika.
+
+- version: 1.6.1
+  changes:
+  - Fixed KRL custom external and speeds.
+
+- version: 1.6.0
+  changes:
+  - Preview support for Doosan.
+  - Preview support for Franka Emika.
+  - New IK for spherical wrist robots.
+  - Staubli robots with elbow offset are now supported.
+  - Added Frame and Tool cast to Plane.
+  - Alpha and theta values can be specified per robot in XML.
+  - Fixed UR sFTP program folder path.
+
+- version: 1.5.2
+  changes:
+  - Fixed bug in KUKA code generation.
+
+- version: 1.5.1
+  changes:
+  - Fixed PulseDo command now works with UR.
+
+- version: 1.5.0
+  changes:
+  - Added support for reading UR's Real-Time Data Exchange outputs.
+  - Added a more informative error message when failure to refresh list of robot libraries.
+  - Updated some icons.
+
+- version: 1.4.1
+  changes:
+  - Added Frames to robot library.
+  - Tools and Frames defined in robot libraries can be set to use the definition stored in the controller, and tool/base number in KUKA.
+
+- version: 1.3.1
+  changes:
+  - Added useControllerNumbering attribute to the IO element, allowing to specify the signal number directly instead of defining a list of signal names.
+
+- version: 1.3.0
+  changes:
+  - Added alternative back-end to 'Remote connection' with UR, that uses FTP and the dashboard interface.
+  - Fixed 'Save program' with UR now saves a proper .urp file.
+
+- version: 1.2.0
+  changes:
+  - Added new Create Program component with variable targets input.
+  - Added error message when 3dm library file is not found.
+  - Fixed regression joint parameter not allowing null or empty.
+
+- version: 1.1.10
+  changes:
+  - Added Joints parameter to more components.
+  - Fixed backwards compatibility with Joints parameter.
+  - Fixed libraries list icons not updating on Mac.
+
+- version: 1.1.9
+  changes:
+  - Added Joints parameter for the joint target input.
+  - Fixed libraries form UI issues on Mac.
+
+- version: 1.1.8
+  changes:
+  - Fixed ABB remote issues with RW 5.x controllers.
+  - Fixed duplicated code when saving ABB program.
+
+- version: 1.1.7
+  changes:
+  - Allow to set first target speed on UR (use 100 mm/s for original speed)
+
+- version: 1.1.6
+  changes:
+  - Improved speed approximation of joint motions in UR.
+  - Organized samples.
+
+- version: 1.1.5
+  changes:
+  - Added NuGet packages.
+  - Fixed compatibility with early Rhino 7.0 service releases.
+
+- version: 1.1.4
+  changes:
+  - Added example using Robots in a Unity project (without Rhino.Inside)
+  - Fixed invalid cast in collision and custom code components.
+  - Fixed should not appear as supported in Rhino 6 or lower.
+
+- version: 1.1.3
+  changes:
+  - Cleaned library files and fixed invalid meshes.
+  - Improved value list that displays robot libraries.
+  - Improved some program errors threw exceptions rather than show in error output.
+  - Fixed custom command component had invalid name.
+
+- version: 1.1.2
+  changes:
+  - Robot system names are now case insensitive.
+  - Fixed error displaying some parameter names.
+  - Fixed forward kinematics transforms in intermediate joints.
+
+- version: 1.1.1
+  changes:
+  - Fixed refresh libraries not working.
+
+- version: 1.1.0
+  changes:
+  - Added UI to install robot libraries automatically inside Grasshopper.
+  - Added validation to names of target attributes and programs.
+  - Improved behavior of simulation playback controls.
+
+- version: 1.0.4
+  changes:
+  - Added icon for create tool component.
+  - Tweaked placement of components and parameters in toolbar.
+  - RobotCell and Tool elements can now be placed in the same xml file.
+  - Tool can optionally specify a centroid in the xml.
+  - Fixed regression caused by multifile refactor.
+  - Fixed sample files.
+  - Fixed robot meshes sometimes loaded from the wrong 3dm file if name was the same.
+  - Fixed load tool not reading the weight parameter.
+  - Some performance improvements in loading robots and tools from disk.
+
+- version: 1.0.3
+  changes:
+  - Fixed robot system value list not remembering its selection.
+  - Fixed deprecated warnings from ABB SDK.
+  - Fixed some xml attributes not read.
+  - Some performance improvements.
+
+- version: 1.0.2
+  changes:
+  - Added warning when multifile input is used with UR.
+  - Fixed robot system value list didn't update if robot library changed.
+  - Fixed some custom parameters would show an error when hovering the input.
+  - Additional cleanup.
+
+- version: 1.0.1
+  changes:
+  - This and newer versions will be available only through Yak package manager.
+  - Large refactor and project restructure, some bugs might have crept in.
+  - Robot system can be loaded without meshes if not needed for improved performance (API only).
+  - Fixed rounding PulseDO value to 3 decimal places.
+  - Fixed unnecessary trailing zeros in generated programs.

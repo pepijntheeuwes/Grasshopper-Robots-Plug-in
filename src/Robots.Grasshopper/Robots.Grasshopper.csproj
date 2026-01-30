@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyTitle>$(Product) Grasshopper</AssemblyTitle>
+
+    <PackageId>Robots.Rhino</PackageId>
+    <PackageIcon>iconRhino128.png</PackageIcon>
+    <Description>$(Description) This package is for development of Rhino and Grasshopper plug-ins.</Description>
+    <PackageTags>$(PackageTags);Rhino;Grasshopper</PackageTags>
+    <Rhino>8</Rhino>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Windows.Forms" />
+    <PackageReference Include="Grasshopper" Version="7.0.20314.3001" ExcludeAssets="runtime" />
+    <ProjectReference Include="..\Robots\Robots.csproj" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Embed\**\*" />
+    <None Include="$(RootDir)build\Assets\iconRhino128.png" Pack="true" PackagePath="" Visible="false" />
+    <None Include="$(RootDir)build\Assets\iconRobot.png" CopyToOutputDirectory="PreserveNewest" Visible="false" />
+    <None Include="Build\Robots.Rhino.targets" Pack="true" PackagePath="buildTransitive" />
+    <None Include="$(TargetDir)$(Product).dll" Pack="true" PackagePath="lib\net48" Visible="false" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="$([MSBuild]::IsOSPlatform(Windows)) and $(Configuration) == 'Debug'">
+    <StartProgram>C:\Program Files\Rhino $(Rhino)\System\Rhino.exe</StartProgram>
+    <StartArguments>/nosplash /runscript="-grasshopper window show _enter"</StartArguments>
+    <StartAction>Program</StartAction>
+
+    <PackageDir>$(AppData)\McNeel\Rhinoceros\packages\$(Rhino).0\$(Product)</PackageDir>
+    <OutputPath>$(PackageDir)\$(Version)</OutputPath>
+  </PropertyGroup>
+
+  <Target Name="Manifest" BeforeTargets="Build" Condition="$(Configuration) == 'Debug'">
+    <WriteLinesToFile File="$(PackageDir)\manifest.txt" Overwrite="true" Lines="$(Version)" />
+  </Target>
+
+  <Target Name="Rename" AfterTargets="AfterBuild" Condition="'$(ContinuePackingAfterGeneratingNuspec)' != 'true'">
+    <Move SourceFiles="$(TargetPath)" DestinationFiles="$(TargetDir)$(Product).gha" />
+  </Target>
+
+</Project>

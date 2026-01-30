@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/visose/Robots/discussions/new?category=q-a
+    about: Ask a question
