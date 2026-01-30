@@ -21,6 +21,9 @@
 
 **Robots** is a plugin for **[Rhino's](https://www.rhino3d.com/)** **Grasshopper** visual programming interface. It allows users to create and simulate robot programs for **ABB**, **KUKA**, **UR**, **Staubli**, **Doosan**, and **Franka Emika** robots. It works in **Rhino 7** and **8** for **Windows** and **MacOS**.
 
+## Modifications
+In this cloned git repository from Visose **[https://github.com/visose/Robots]** other motion commands for universal robots have been added. Originally only movel and movej were included but this repository also contain movep. This motion command is more suitable voor despensing purposes due to it's ability to maintain a constant speed.
+
 ## Install
 
 > If upgrading from an old version check [here](../../../wiki/home#Upgrading-from-an-older-version).
