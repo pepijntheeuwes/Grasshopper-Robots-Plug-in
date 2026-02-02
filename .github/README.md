@@ -22,7 +22,11 @@
 **Robots** is a plugin for **[Rhino's](https://www.rhino3d.com/)** **Grasshopper** visual programming interface. It allows users to create and simulate robot programs for **ABB**, **KUKA**, **UR**, **Staubli**, **Doosan**, and **Franka Emika** robots. It works in **Rhino 7** and **8** for **Windows** and **MacOS**.
 
 ## Modifications
-In this cloned git repository from Visose **[https://github.com/visose/Robots]** other motion commands for universal robots have been added. Originally only movel and movej were included but this repository also contain movep. This motion command is more suitable voor despensing purposes due to it's ability to maintain a constant speed.
+In this cloned git repository from Visose **[https://github.com/visose/Robots]** other motion commands for universal robots have been added. Originally only movel and movej were included but this repository also contain movep. This motion command is more suitable voor despensing purposes due to it's ability to maintain a constant speed. Secondly, the move command servoj is added. 
+This command only takes joint poses as input so you have to use the inverse kinematics component from Robots when you have cartesian poses. In the image below is an example of the conversion of cartesian target and the creation of a servoj target. Here, the Anemone plug-in is used to loop through all target poses because the inverse kinematics component can only take one poses to convert.
+
+<img width="1725" height="500" alt="image" src="https://github.com/user-attachments/assets/9bf5a3f7-8a56-4322-a71b-6d80d92c63e7" />
+
 
 ## Install
 
