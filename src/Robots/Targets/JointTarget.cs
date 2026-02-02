@@ -7,8 +7,8 @@ public class JointTarget : Target
 {
     public double[] Joints { get; set; }
 
-    public JointTarget(double[] joints, Tool? tool = null, Speed? speed = null, Zone? zone = null, Command? command = null, Frame? frame = null, IEnumerable<double>? external = null)
-        : base(tool, speed, zone, command, frame, external)
+    public JointTarget(double[] joints, Tool? tool = null, Speed? speed = null, Zone? zone = null, Command? command = null, Frame? frame = null, IEnumerable<double>? external = null, ServoParameters? servoParameters = null)
+        : base(tool, speed, zone, command, frame, external, servoParameters)
     {
         if (joints.Length != 6 && joints.Length != 7)
             Array.Resize(ref joints, 6);

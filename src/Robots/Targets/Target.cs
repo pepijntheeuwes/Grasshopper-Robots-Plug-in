@@ -2,7 +2,7 @@ using static Robots.Util;
 
 namespace Robots;
 
-public abstract class Target(Tool? tool, Speed? speed, Zone? zone, Command? command, Frame? frame, IEnumerable<double>? external) : IToolpath
+public abstract class Target(Tool? tool, Speed? speed, Zone? zone, Command? command, Frame? frame, IEnumerable<double>? external, ServoParameters? servoParameters = null) : IToolpath
 {
     public static Target Default { get; } = new JointTarget([0, HalfPI, 0, 0, 0, 0]);
 
@@ -13,7 +13,7 @@ public abstract class Target(Tool? tool, Speed? speed, Zone? zone, Command? comm
     public Command Command { get; set; } = command ?? Command.Default;
     public double[] External { get; set; } = (external is not null) ? external.ToArray() : [];
     public string[]? ExternalCustom { get; set; }
-
+    public ServoParameters? ServoParameters { get; set; } = servoParameters;
     public IEnumerable<Target> Targets => Enumerable.Repeat(this, 1);
 
     public void AppendCommand(Command command)

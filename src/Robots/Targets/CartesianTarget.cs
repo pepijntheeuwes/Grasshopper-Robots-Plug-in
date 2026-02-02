@@ -4,10 +4,10 @@ namespace Robots;
 
 [Flags]
 public enum RobotConfigurations { None = 0, Shoulder = 1, Elbow = 2, Wrist = 4, Undefined = 8 }
-public enum Motions { Joint, Linear, Process, Circular, Spline }
+public enum Motions { Joint, Linear, Process, Circular, Spline, Servo }
 
-public class CartesianTarget(Plane plane, RobotConfigurations? configuration = null, Motions motion = Motions.Joint, Tool? tool = null, Speed? speed = null, Zone? zone = null, Command? command = null, Frame? frame = null, IEnumerable<double>? external = null)
-    : Target(tool, speed, zone, command, frame, external)
+public class CartesianTarget(Plane plane, RobotConfigurations? configuration = null, Motions motion = Motions.Joint, Tool? tool = null, Speed? speed = null, Zone? zone = null, Command? command = null, Frame? frame = null, IEnumerable<double>? external = null, ServoParameters? servoParameters = null)
+    : Target(tool, speed, zone, command, frame, external, servoParameters)
 {
     public Plane Plane { get; set; } = plane;
     public RobotConfigurations? Configuration { get; set; } = configuration;
@@ -15,7 +15,7 @@ public class CartesianTarget(Plane plane, RobotConfigurations? configuration = n
     public bool pTarget = false;
 
     public CartesianTarget(Plane plane, Target target, RobotConfigurations? configuration = null, Motions motion = Motions.Joint, IEnumerable<double>? external = null)
-        : this(plane, configuration, motion, target.Tool, target.Speed, target.Zone, target.Command, target.Frame, external ?? target.External) { }
+         : this(plane, configuration, motion, target.Tool, target.Speed, target.Zone, target.Command, target.Frame, external ?? target.External, target.ServoParameters) { }
 
     public override string ToString()
     {

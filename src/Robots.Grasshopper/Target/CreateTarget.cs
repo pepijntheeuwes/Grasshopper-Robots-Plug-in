@@ -22,7 +22,8 @@ public sealed class CreateTarget : GH_Component, IGH_VariableParameterComponent
             new ZoneParameter() { Name = "Zone", NickName = "Z", Description = "Approximation zone in mm", Optional = true },
             new CommandParameter() { Name = "Command", NickName = "C", Description = "Robot command", Optional = true },
             new FrameParameter() { Name = "Frame", NickName = "F", Description = "Base frame", Optional = true },
-            new JointsParameter() { Name = "External", NickName = "E", Description = "External axes", Optional = true }
+            new JointsParameter() { Name = "External", NickName = "E", Description = "External axes", Optional = true },
+            new ServoParametersParameter() { Name = "Servo", NickName = "Se", Description = "Servo parameters for UR servoj motion", Optional = true }
     ];
 
     bool _isCartesian = true;
@@ -82,6 +83,7 @@ public sealed class CreateTarget : GH_Component, IGH_VariableParameterComponent
         bool hasCommand = Params.Input.Any(x => x.Name == "Command");
         bool hasFrame = Params.Input.Any(x => x.Name == "Frame");
         bool hasExternal = Params.Input.Any(x => x.Name == "External");
+        bool hasServo = Params.Input.Any(x => x.Name == "Servo");
 
         Target? sourceTarget = null;
 
@@ -101,6 +103,7 @@ public sealed class CreateTarget : GH_Component, IGH_VariableParameterComponent
         Command? command = null;
         Frame? frame = null;
         double[]? external = null;
+        ServoParameters? servo = null;
 
         if (hasJoints)
         {
@@ -204,6 +207,15 @@ public sealed class CreateTarget : GH_Component, IGH_VariableParameterComponent
             external = sourceTarget.External;
         }
 
+        if (hasServo)
+        {
+            DA.GetData("Servo", ref servo);
+        }
+        else if (sourceTarget is not null)
+        {
+            servo = sourceTarget.ServoParameters;
+        }
+
         bool localCartesian = _isCartesian;
 
         if (hasTarget && !hasPlane && !hasJoints && sourceTarget is not null)
@@ -220,7 +232,7 @@ public sealed class CreateTarget : GH_Component, IGH_VariableParameterComponent
             if (joints is null)
                 throw new ArgumentException("Joints should not be null");
 
-            target = new JointTarget(joints, tool, speed, zone, command, frame, external);
+            target = new JointTarget(joints, tool, speed, zone, command, frame, external, servo);
         }
 
         if (sourceTarget is not null)
@@ -248,6 +260,7 @@ public sealed class CreateTarget : GH_Component, IGH_VariableParameterComponent
         Menu_AppendSeparator(menu);
         Menu_AppendItem(menu, "Joint target", SwitchCartesianEvent, true, !_isCartesian);
         Menu_AppendItem(menu, "Joint input", AddJoints, !_isCartesian, Params.Input.Any(x => x.Name == "Joints"));
+        Menu_AppendItem(menu, "Motion input", AddMotion, !_isCartesian, Params.Input.Any(x => x.Name == "Motion"));
         Menu_AppendSeparator(menu);
         Menu_AppendItem(menu, "Cartesian target", SwitchCartesianEvent, true, _isCartesian);
         Menu_AppendItem(menu, "Plane input", AddPlane, _isCartesian, Params.Input.Any(x => x.Name == "Plane"));
@@ -260,6 +273,7 @@ public sealed class CreateTarget : GH_Component, IGH_VariableParameterComponent
         Menu_AppendItem(menu, "Command input", AddCommand, true, Params.Input.Any(x => x.Name == "Command"));
         Menu_AppendItem(menu, "Frame input", AddFrame, true, Params.Input.Any(x => x.Name == "Frame"));
         Menu_AppendItem(menu, "External input", AddExternal, true, Params.Input.Any(x => x.Name == "External"));
+        Menu_AppendItem(menu, "Servo input (UR)", AddServo, true, Params.Input.Any(x => x.Name == "Servo"));
     }
 
     // Variable methods
@@ -353,6 +367,7 @@ public sealed class CreateTarget : GH_Component, IGH_VariableParameterComponent
             valueList.ListItems.Add(new GH_ValueListItem("Joint", "\"Joint\""));
             valueList.ListItems.Add(new GH_ValueListItem("Linear", "\"Linear\""));
             valueList.ListItems.Add(new GH_ValueListItem("Process", "\"Process\""));
+            valueList.ListItems.Add(new GH_ValueListItem("Servo", "\"Servo\""));
             Instances.ActiveCanvas.Document.AddObject(valueList, false);
             parameter.AddSource(valueList);
             parameter.CollectData();
@@ -366,6 +381,7 @@ public sealed class CreateTarget : GH_Component, IGH_VariableParameterComponent
     private void AddCommand(object sender, EventArgs e) => AddParam(8);
     private void AddFrame(object sender, EventArgs e) => AddParam(9);
     private void AddExternal(object sender, EventArgs e) => AddParam(10);
+    private void AddServo(object sender, EventArgs e) => AddParam(11);
 
     bool IGH_VariableParameterComponent.CanInsertParameter(GH_ParameterSide side, int index) => false;
     bool IGH_VariableParameterComponent.CanRemoveParameter(GH_ParameterSide side, int index) => false;
