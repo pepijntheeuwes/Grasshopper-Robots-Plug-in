@@ -166,9 +166,13 @@ public sealed class CreateTarget : GH_Component, IGH_VariableParameterComponent
         {
             DA.GetData("Speed", ref speed);
         }
-        else if (sourceTarget is not null)
+        else if (sourceTarget is not null && !hasServo)
         {
             speed = sourceTarget.Speed;
+        }
+        else if (hasServo)
+        {
+            speed = null; // Forces null for servo motions without speed input
         }
 
         if (hasZone)

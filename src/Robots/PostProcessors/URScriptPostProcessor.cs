@@ -105,12 +105,20 @@ class URScriptPostProcessor : IPostProcessor
                 {
                     double[] joints = programTarget.IsJointTarget ? ((JointTarget)programTarget.Target).Joints : programTarget.Kinematics.Joints;
 
-                    // Check for servo motion
                     if (target.ServoParameters is not null)
                     {
-                        var speed = GetAxisSpeed();
                         var servo = target.ServoParameters;
-                        moveText = $"  servoj([{joints[0]:0.####}, {joints[1]:0.####}, {joints[2]:0.####}, {joints[3]:0.####}, {joints[4]:0.####}, {joints[5]:0.####}], {speed}, t={servo.TimeStep:0.####}, lookahead_time={servo.LookaheadTime:0.####}, gain={servo.Gain:0.####})";
+
+                        // Check if speed is null to decide string format
+                        if (target.Speed == null)
+                        {
+                            moveText = $"  servoj([{joints[0]:0.####}, {joints[1]:0.####}, {joints[2]:0.####}, {joints[3]:0.####}, {joints[4]:0.####}, {joints[5]:0.####}], t={servo.TimeStep:0.####}, lookahead_time={servo.LookaheadTime:0.####}, gain={servo.Gain:0.####})";
+                        }
+                        else
+                        {
+                            var speed = GetAxisSpeed();
+                            moveText = $"  servoj([{joints[0]:0.####}, {joints[1]:0.####}, {joints[2]:0.####}, {joints[3]:0.####}, {joints[4]:0.####}, {joints[5]:0.####}], {speed}, t={servo.TimeStep:0.####}, lookahead_time={servo.LookaheadTime:0.####}, gain={servo.Gain:0.####})";
+                        }
                     }
                     else
                     {
@@ -155,14 +163,14 @@ class URScriptPostProcessor : IPostProcessor
                                 break;
                             }
 
-                        case Motions.Servo:
-                            {
-                                // servoj requires joint angles, get them from IK
-                                double[] joints = programTarget.Kinematics.Joints;
-                                var servo = target.ServoParameters ?? ServoParameters.Default;
-                                moveText = $"  servoj([{joints[0]:0.####}, {joints[1]:0.####}, {joints[2]:0.####}, {joints[3]:0.####}, {joints[4]:0.####}, {joints[5]:0.####}], t={servo.TimeStep:0.####}, lookahead_time={servo.LookaheadTime:0.####}, gain={servo.Gain:0.####})";
-                                break;
-                            }
+                        //case Motions.Servo:
+                        //    {
+                        //        // servoj requires joint angles, get them from IK
+                        //        double[] joints = programTarget.Kinematics.Joints;
+                        //        var servo = target.ServoParameters ?? ServoParameters.Default;
+                        //        moveText = $"  servoj([{joints[0]:0.####}, {joints[1]:0.####}, {joints[2]:0.####}, {joints[3]:0.####}, {joints[4]:0.####}, {joints[5]:0.####}], t={servo.TimeStep:0.####}, lookahead_time={servo.LookaheadTime:0.####}, gain={servo.Gain:0.####})";
+                        //        break;
+                        //    }
                         default:
                             throw new ArgumentException($" Motion '{cartesian.Motion}' not supported.", nameof(cartesian.Motion));
                     }

@@ -113,7 +113,7 @@ class CheckProgram
         }
 
         CheckTargets(t => t.Tool.Equals(Tool.Default), "have their tool set to default");
-        CheckTargets(t => t.Speed.Equals(Speed.Default), "have their speed set to default");
+        CheckTargets(t => t.Speed != null && t.Speed.Equals(Speed.Default), "have their speed set to default");
 
         // Fix linear with forced config
         CheckTargets(
@@ -138,7 +138,7 @@ class CheckProgram
         {
             attributes.Add(target.Tool);
             attributes.Add(target.Frame);
-            attributes.Add(target.Speed);
+            if (target.Speed != null) attributes.Add(target.Speed); // Null check
             attributes.Add(target.Zone);
         }
 
@@ -439,7 +439,12 @@ class CheckProgram
         }
         else if (namedAttribute is Speed speed)
         {
-            foreach (var target in targets) if (target.Target.Speed.Equals(attribute)) { target.Target = target.Target.ShallowClone(); target.Target.Speed = speed; }
+            foreach (var target in targets)
+                if (target.Target.Speed != null && target.Target.Speed.Equals(attribute))
+                {
+                    target.Target = target.Target.ShallowClone();
+                    target.Target.Speed = speed;
+                }
         }
         else if (namedAttribute is Zone zone)
         {
@@ -465,6 +470,12 @@ class CheckProgram
 
     (double, double, int, SpeedType) GetSpeeds(ProgramTarget target, ProgramTarget prevTarget)
     {
+        if (target.Target.Speed == null)
+        {
+            double servoTime = target.Target.ServoParameters?.TimeStep ?? 0.008;
+            return (servoTime, 0, -1, SpeedType.Axis);
+        }
+
         Plane prevPlane = target.GetPrevPlane(prevTarget);
         var joints = _robotSystem.GetJoints(target.Group);
         double deltaTime = 0;

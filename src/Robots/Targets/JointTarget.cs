@@ -1,11 +1,13 @@
-using static System.Math;
+using System;
 using static Robots.Util;
+using static System.Math;
 
 namespace Robots;
 
 public class JointTarget : Target
 {
     public double[] Joints { get; set; }
+
 
     public JointTarget(double[] joints, Tool? tool = null, Speed? speed = null, Zone? zone = null, Command? command = null, Frame? frame = null, IEnumerable<double>? external = null, ServoParameters? servoParameters = null)
         : base(tool, speed, zone, command, frame, external, servoParameters)
@@ -63,10 +65,18 @@ public class JointTarget : Target
     {
         string type = $"Joint ({string.Join(",", Joints.Select(x => $"{x:0.###}"))})";
         string tool = $", {Tool}";
-        string speed = $", {Speed}";
+        string speed = Speed != null ? $", {Speed}" : ", No Speed (Servo)"; // Null check
         string zone = $", {Zone}";
         string commands = Command != Command.Default ? ", Contains commands" : "";
         string external = External.Length > 0 ? $", {External.Length.ToString():0} external axes" : "";
-        return $"Target ({type}{tool}{speed}{zone}{commands}{external})";
+        string servoparameters = $", {ServoParameters}";
+        if (ServoParameters == null)
+        {
+            return $"Target ({type}{tool}{speed}{zone}{commands}{external})";
+        }
+        else
+        {
+            return $"Target ({type}{tool}{commands}{external}{servoparameters})";
+        }
     }
 }
